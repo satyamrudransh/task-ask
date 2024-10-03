@@ -1,0 +1,55 @@
+# FROM node:14.18.2 AS node
+FROM php:8.2.0-fpm
+
+# Install php extention
+RUN apt-get update && \ 
+     apt install libgmp-dev libzip-dev cron git nano -y \
+     zip unzip  \ 
+     supervisor -y \
+     # &&  pecl install mongodb \
+     && docker-php-ext-install pdo pdo_mysql exif gmp 
+
+# RUN docker-php-ext-install pdo pdo_mysql gmp zip
+# Copy the supervisor configuration file
+# COPY ./supervisor/laravel-worker.conf /etc/supervisor/conf.d/
+
+RUN curl -sS https://getcomposer.org/installer | php -- \
+     --install-dir=/usr/local/bin --filename=composer
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+# COPY --from=node /usr/local/bin/node /usr/local/bin/node
+# Crontab file copied to cron.d directory.
+# COPY ./docker/dev/containerDB/cronjob/. /etc/cron.d/
+# RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+
+WORKDIR /app
+COPY . .
+# RUN composer install
+# CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD  composer install ;\
+     # npm install ; \
+     # npm install -g npx; \
+     service cron start ; \
+     # git config  --global user.name "Vikram Pratap Singh" ; \
+     # git config  --global user.email "vikram.singh@thehigherpitch.com" ; \
+     # git config  --global pull.rebase false ; \
+     php artisan key:generate --force ; \
+     php artisan cache:clear ; \
+     php artisan config:clear ; \
+     php artisan migrate ; \
+     # php artisan migrate --database=tenant_service  --path=database/migrations/tenant  ; \
+     # php artisan db:seed; \ 
+     # php artisan config:cache ; \
+     # php artisan route:cache; \
+     # php artisan storage:link ; \
+     # php artisan git:clone --team=forethoughtteam --repo=api_collection_forebase ; \
+     # php artisan postmanToOpenApi:repo  --repo=api_collection_forebase ; \
+     # php artisan migrate ; \
+     # php artisan db:seed; \ 
+     # php artisan serve --host=0.0.0.0 ;
+     # cron && php artisan serve --host=0.0.0.0 --port=8000 && tail -f /var/log/cron.log;
+     # php artisan serve --host=0.0.0.0;
+     php artisan serve --host=0.0.0.0 --port=8096;
+
