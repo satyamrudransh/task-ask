@@ -60,5 +60,10 @@ Route::get('active-subcategories/{id}', [SubCategoryController::class, 'getActiv
 Route::post('product', [ProductController::class, 'store']);
 
 Route::get('/product', [ProductController::class, 'index']);
+Route::get('/product/{id}', [ProductController::class, 'show']);
+
+Route::delete('/product/{id}', [ProductController::class, 'destroy']);
+
+Route::post('/product/{id}', [ProductController::class, 'update']);
 
 // });

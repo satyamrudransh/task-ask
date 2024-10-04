@@ -17,6 +17,7 @@ class CreateProductPdfTable extends Migration
             $table->id();
             $table->string('file_path')->nullable(); // Category name
             $table->string('product_id')->nullable(); // Category name
+            $table->string('heading')->nullable(); // Category name
             
             $table->timestamps();
         });

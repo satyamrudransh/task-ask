@@ -11,7 +11,7 @@ class ProductPdf extends Model
     protected $table = 'product_pdf';
 
     protected $fillable = [
-        'file_path','product_id'
+        'file_path','product_id','heading'
         
     ];
 
