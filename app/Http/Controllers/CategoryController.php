@@ -28,6 +28,12 @@ class CategoryController extends Controller
         return response()->json(Category::all());
     }
 
+    public function activeIndex(Request $request)
+    {
+        // Fetch only active categories
+        $categories = Category::where('status', 1)->get();
+        return response()->json($categories);
+    }
     // Update Category
     public function update(Request $request, $id)
     {
@@ -50,4 +56,7 @@ class CategoryController extends Controller
 
         return response()->json(null, 204);
     }
+
+
+
 }

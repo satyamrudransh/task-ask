@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+    protected $table = 'categories';
+
     protected $fillable = ['name', 'status']; // Mass assignable attributes
 
+
+    public function subcategories()
+    {
+        return $this->hasMany(Subcategory::class);
+    }
 }
